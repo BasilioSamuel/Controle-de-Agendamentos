@@ -111,8 +111,69 @@ def adicionar_atendimento():
   return pros_selecao()
 
 def remover_atendimento():
-  print("Funcionalidade de remoção ainda será implementada.")
-  return pros_selecao()
+    global segunda, terca, quarta, quinta, sexta, sabado, domingo
+    
+    print("\nDias da semana disponíveis:")
+    print("1. Segunda-feira")
+    print("2. Terça-feira")
+    print("3. Quarta-feira")
+    print("4. Quinta-feira")
+    print("5. Sexta-feira")
+    print("6. Sábado")
+    print("7. Domingo")
+    
+    try:
+        dia = int(input("Digite o número correspondente ao dia da semana: "))
+        
+        if dia == 1:
+            lista_dia = segunda
+            nome_dia = "Segunda-feira"
+        elif dia == 2:
+            lista_dia = terca
+            nome_dia = "Terça-feira"
+        elif dia == 3:
+            lista_dia = quarta
+            nome_dia = "Quarta-feira"
+        elif dia == 4:
+            lista_dia = quinta
+            nome_dia = "Quinta-feira"
+        elif dia == 5:
+            lista_dia = sexta
+            nome_dia = "Sexta-feira"
+        elif dia == 6:
+            lista_dia = sabado
+            nome_dia = "Sábado"
+        elif dia == 7:
+            lista_dia = domingo
+            nome_dia = "Domingo"
+        else:
+            print("Opção inválida!")
+            return remover_atendimento()
+        
+        if not lista_dia:
+            print(f"Não há atendimentos cadastrados na {nome_dia}.")
+            return pros_selecao()
+        
+
+        print(f"\nAtendimentos na {nome_dia}:")
+        for i, atendimento in enumerate(lista_dia):
+            print(f"{i}: {atendimento}")
+        
+        try:
+            indice = int(input("Digite o número do atendimento que deseja remover: "))
+            
+            if 0 <= indice < len(lista_dia):
+                removido = lista_dia.pop(indice)
+                print(f"Atendimento '{removido}' removido com sucesso da {nome_dia}!")
+            else:
+                print("Índice inválido!")
+        except ValueError:
+            print("Por favor, digite um número válido.")
+    
+    except ValueError:
+        print("Por favor, digite um número válido para o dia da semana.")
+    
+    pros_selecao()
 
 inicio()
 menu()
