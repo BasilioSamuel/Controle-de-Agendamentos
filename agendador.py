@@ -175,5 +175,31 @@ def remover_atendimento():
     
     pros_selecao()
 
+def cheia():
+   global segunda, terca, quarta, quinta, sexta, sabado, domingo
+
+
+   valor =float(input("Digite o valor da sua hora cheia:"))
+   print("Digite 1. para escolher um dia ou 2. para a semana toda")
+   opcao= int(float("Você deseja saber o calculo do dia ou da semana?"))
+   if opcao ==1:
+    print("\nDias da semana disponíveis:")
+    print("1. Segunda-feira")
+    print("2. Terça-feira")
+    print("3. Quarta-feira")
+    print("4. Quinta-feira")
+    print("5. Sexta-feira")
+    print("6. Sábado")
+    print("7. Domingo")
+    try:
+      dia = int(input("Digite o número correspondente ao dia da semana: "))
+      if dia== 1:
+        calculo= valor * len(dia)
+      print(calculo)
+    except ValueError:
+      print("Por favor, digite um número válido.")
+        
+   
+
 inicio()
 menu()
