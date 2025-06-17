@@ -110,6 +110,50 @@ def normalizar_palavras(texto):
 
     return texto
 
+def marcar_frequencia(id_atendimento, data, presente):
+    conn = conectar()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute(
+            "INSERT INTO frequencia (atendimento_id, data, presente) VALUES (%s, %s, %s)", 
+            (id_atendimento, data, presente)
+        )
+        conn.commit()
+        print("Frequência registrada com sucesso.")
+    except mysql.connector.Error as err:
+        print(f"Erro ao marcar frequência: {err}")
+
+    cursor.close()
+    conn.close()
+
+
+def relatorio_frequencia(id_atendimento):
+    conn = conectar()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute(
+            "SELECT data, presente FROM frequencia WHERE atendimento_id = %s", (id_atendimento,))
+        resultados = cursor.fetchall()
+
+        total = len(resultados)
+        presentes = sum(1 for row in resultados if row[1])
+
+        percentual = (presentes / total * 100) if total > 0 else 0
+
+        print(f"Relatório de Frequência:")
+        print(f"Atendimento: {id_atendimento}")
+        print(f"Presentes: {presentes}")
+        print(f"Ausências: {total - presentes}")
+        print(f"Percentual de presença: {percentual:.2f}%")
+
+    except mysql.connector.Error as err:
+        print(f"Erro ao obter frequência: {err}")
+
+    cursor.close()
+    conn.close()
+
 def adicionar_atendimento_banco(usuario_id, nome_crianca, dia_semana):
     conn = conectar()
     cursor = conn.cursor()
@@ -322,13 +366,16 @@ def cheia(usuario_id):
 # Ajustar menu para receber usuario_id e chamar funções passando ele
 
 def menu(usuario_id):
-    print("\nEste é o Menu de funcionalidades, escolha uma das funcionalidades abaixo:")
+    print("\nEste é o Menu de Funcionalidades, escolha uma das alternativas:")
     print("1. Calendário")
     print("2. Adicionar atendimento")
     print("3. Remover atendimento")
     print("4. Sair")
-    print("5. Calcular valor total de atendimentos (hora cheia)")
-    opcao = input("Digite a opção desejada: ")
+    print("5. Calcular valor total de atendimentos")
+    print("6. Marcar presença")
+    print("7. Verificar frequência")
+
+    opcao = input("Informe a opção: ").strip()
 
     if opcao == "1":
         calendario(usuario_id)
@@ -340,9 +387,23 @@ def menu(usuario_id):
         sair()
     elif opcao == "5":
         cheia(usuario_id)
+    elif opcao == "6":
+        try:
+            atendimento_id = int(input("Informe o ID do atendimento: ").strip()) 
+            data = input("Informe a data (YYYY-MM-DD): ").strip()
+            presente = input("Compareceu? (s/n): ").strip().lower()
+            marcar_frequencia(atendimento_id, data, presente == "s")
+        except ValueError:
+            print("Valor inválido.")
+    elif opcao == "7":
+        try:
+            atendimento_id = int(input("Informe o ID do atendimento: ").strip()) 
+            relatorio_frequencia(atendimento_id)
+        except ValueError:
+            print("Valor inválido.")
     else:
         print("Opção inválida.")
-        menu(usuario_id)
+    return pros_selecao(usuario_id)
 
 def inicio():
     print("Bem-vindo, o aplicativo está iniciando...")
