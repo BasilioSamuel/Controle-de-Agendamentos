@@ -12,9 +12,23 @@ sexta= []
 sabado= []
 domingo= []
 atendimento = []
+
 def login():
-   user=input("Insira seu user:")
-   password=input("Insira sua senha:")
+    tentativas = 3
+
+    while tentativas > 0:
+        user = input("Insira seu user: ")
+        password = input("Insira sua senha: ")
+
+        if user == "admin" and password == "1234":
+            print("Login bem-sucedido!")
+            inicio()
+            return
+        else:
+            tentativas -= 1
+            print(f"Usuário ou senha incorretos. Tentativas restantes: {tentativas}")
+
+    print("Número máximo de tentativas excedido. Encerrando o programa.")
 
 def normalizar_palavras(texto):
     substituicoes = {
@@ -41,6 +55,7 @@ def normalizar_palavras(texto):
 
 def inicio():
   print("Bem-vindo, o aplicativo está iniciando...")
+  menu()
 
 def sair():
   print("Obrigado por utilizar o aplicativo, até a próxima!")
@@ -205,5 +220,6 @@ def cheia():
         
    
 
-inicio()
+login()
+
 
